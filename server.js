@@ -29,27 +29,41 @@ app.get("/notes", function (req, res) {
 
 // Route that returns db.json object when callled
 app.get("/api/notes", function (req, res) {
-  return res.json(JSON.parse(fs.readFileSync("./db/db.json", "utf8")));
+  res.json(
+    JSON.parse(fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8"))
+  );
 });
 
-// Route to create a new note - takes in JSON input, adds to db.json, returns note to client.
+// Route to create a new note - takes in JSON input, adds to db.json, returns note to client
 app.post("/api/notes", function (req, res) {
-  const existingNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-  existingNotes.push(req.body);
+  const existingNotes = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8")
+  );
+  existingNotes.unshift(req.body);
+  // Adds an ID value to each note sequentially
   existingNotes.forEach((element, index) => {
-    element.id = index;
+    element.id = index+1;
   });
-  fs.writeFileSync("./db/db.json", JSON.stringify(existingNotes));
+  fs.writeFileSync(
+    path.join(__dirname, "./db/db.json"),
+    JSON.stringify(existingNotes)
+  );
   res.json(existingNotes);
 });
 
 // Deletes a note by ID passed
-app.delete("/api/notes/:id", function(req, res) {
-  const existingNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-  const updatedNotes = existingNotes.filter(function(note){
+app.delete("/api/notes/:id", function (req, res) {
+  const existingNotes = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8")
+  );
+  // Filters the note matching the ID passed from the array
+  const updatedNotes = existingNotes.filter(function (note) {
     return note.id != req.params.id;
-  })
-  fs.writeFileSync("./db/db.json", JSON.stringify(updatedNotes));
+  });
+  fs.writeFileSync(
+    path.join(__dirname, "./db/db.json"),
+    JSON.stringify(updatedNotes)
+  );
   res.json(updatedNotes);
 });
 
