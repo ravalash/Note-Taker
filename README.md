@@ -68,7 +68,7 @@ New ID numbers are applied to the remaining notes upon deletion to ensure they a
 The unshift method is used instead of the push method to keep the newest notes at the top of the list without making changes to the front end Javascript.
 
 
-# How to Use
+## How to Use
 Dependencies must be installed individually or via package.json file
 * express
 * fs
