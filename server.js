@@ -31,12 +31,8 @@ app.get("/notes", function (req, res) {
 app.get("/api/notes", function (req, res) {
   res.json(
     JSON.parse(
-      fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", function (
-        error
-      ) {
-        if (error) {
-          return console.log(error);
-        }
+      fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", (err) => {
+        if (err) throw err;
       })
     )
   );
@@ -45,12 +41,8 @@ app.get("/api/notes", function (req, res) {
 // Route to create a new note - takes in JSON input, adds to db.json, returns note to client
 app.post("/api/notes", function (req, res) {
   const existingNotes = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", function (
-      error
-    ) {
-      if (error) {
-        return console.log(error);
-      }
+    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", (err) => {
+      if (err) throw err;
     })
   );
   existingNotes.unshift(req.body);
@@ -61,10 +53,8 @@ app.post("/api/notes", function (req, res) {
   fs.writeFileSync(
     path.join(__dirname, "./db/db.json"),
     JSON.stringify(existingNotes),
-    function (error) {
-      if (error) {
-        return console.log(error);
-      }
+    (err) => {
+      if (err) throw err;
     }
   );
   res.json(existingNotes);
@@ -73,12 +63,8 @@ app.post("/api/notes", function (req, res) {
 // Deletes a note by ID passed
 app.delete("/api/notes/:id", function (req, res) {
   const existingNotes = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", function (
-      error
-    ) {
-      if (error) {
-        return console.log(error);
-      }
+    fs.readFileSync(path.join(__dirname, "./db/db.json"), "utf8", (err) => {
+      if (err) throw err;
     })
   );
   // Filters the note matching the ID passed from the array
@@ -88,10 +74,8 @@ app.delete("/api/notes/:id", function (req, res) {
   fs.writeFileSync(
     path.join(__dirname, "./db/db.json"),
     JSON.stringify(updatedNotes),
-    function (error) {
-      if (error) {
-        return console.log(error);
-      }
+    (err) => {
+      if (err) throw err;
     }
   );
   res.json(updatedNotes);
